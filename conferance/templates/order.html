@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block title %}预约详情 | {{ room.num }}{% endblock %}
+
+{% block body %}
+    {% for i in order %}
+        <h4>{{ i.time }}-{{ i.user }}-{{ i.room }}</h4>
+    {% endfor %}
+{% endblock %}

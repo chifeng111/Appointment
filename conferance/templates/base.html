@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+</head>
+
+
+<body>
+<nav class="navbar navbar-inverse">
+<div class="container-fluid">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navtop">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="{% url 'conferance:list' %}">Home</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="navtop">
+      <ul class="nav navbar-nav">
+          <li class=""><a href="#">List</a></li>
+      </ul>
+
+       <ul class="nav navbar-nav navbar-right">
+           <li><a href="#">New blog</a></li>
+           <li>{% block user_information %}{% endblock %}</li>
+       </ul>
+
+    </div>
+
+</div>
+</nav>
+
+
+    {% if messages %}
+        <ul class="messagelist">
+            {% for i in messages %}
+                <li>{{ i }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% block body %}{% endblock %}
+
+
+    <script src="/static/jquery/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/bootstrap.js"></script>
+    <script src="/static/js/npm.js"></script>
+</body>
+</html>
