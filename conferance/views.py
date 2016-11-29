@@ -1,6 +1,8 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
+from django.contrib.auth import authenticate, login, logout
 from .models import ConfeRoom, Order
+from .forms import Logi_form
 
 # Create your views here.
 def list(request):
@@ -20,10 +22,24 @@ def appointment(request, id):
     return render(request, 'order.html', content)
 
 def logi(request):
-    pass
+    form = Logi_form()
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        u = authenticate(username=username, password=password)
+        if u and u.is_active:
+            login(request, u)
+            return redirect('conferance:list')
+
+    content = {
+        'form': form
+    }
+    return render(request, 'logi.html', content)
 
 def logo(request):
-    pass
+    if request.user.is_active:
+        logout(request)
+        return redirect('conferance:list')
 
 def register(request):
     pass

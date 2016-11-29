@@ -29,8 +29,14 @@
       </ul>
 
        <ul class="nav navbar-nav navbar-right">
-           <li><a href="#">New blog</a></li>
-           <li>{% block user_information %}{% endblock %}</li>
+           <!--<li><a href="#">New blog</a></li>-->
+           <li>
+               {% if request.user.is_active %}
+                   <p class="navbar-text">{{ user.username }}/<a href="{% url 'conferance:logo' %}">Logout</a> </p>
+               {% else %}
+                   <p class="navbar-text"><a href="{% url 'conferance:register' %}">Register</a>/<a href="{% url 'conferance:logi' %}">Login</a></p>
+               {% endif %}
+           </li>
        </ul>
 
     </div>
