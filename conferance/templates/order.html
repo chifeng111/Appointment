@@ -6,4 +6,6 @@
     {% for i in order %}
         <h4>{{ i.time }}-{{ i.user }}-{{ i.room }}</h4>
     {% endfor %}
+    <br>
+    <a href="{% url 'conferance:add' room.id %}" class="btn btn-default" role="button">预约</a>
 {% endblock %}

@@ -9,4 +9,5 @@ urlpatterns = [
     url(r'^logi/$', views.logi, name='logi'),
     url(r'^logo/$', views.logo, name='logo'),
     url(r'^register/$', views.register, name='register'),
+    url(r'^(?P<id>[0-9]+)/add/$', views.add, name='add'),
 ]

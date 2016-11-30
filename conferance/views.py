@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from .models import ConfeRoom, Order
-from .forms import Logi_form
+from .forms import Logi_form, Register_form, Add_form
 
 # Create your views here.
 def list(request):
@@ -42,4 +42,34 @@ def logo(request):
         return redirect('conferance:list')
 
 def register(request):
-    pass
+    form = Register_form(request.POST)
+    if form.is_valid():
+        user = form.save(commit=False)
+        username = form.cleaned_data["username"]
+        password = form.cleaned_data["password"]
+        user.username = username
+        user.set_password(password)
+        user.save()
+        user = authenticate(username=username, password=password)
+        if user.is_active:
+            login(request, user)
+            return redirect('conferance:list')
+
+    content = {
+        'form': form
+    }
+    return render(request, 'logi.html', content)
+
+def add(request, id):
+    form = Add_form(request.POST)
+    if form.is_valid():
+        instance = form.save(commit=False)
+        instance.user = request.user
+        instance.room = ConfeRoom.objects.get(id=id)
+        instance.save()
+        return redirect('/conferance/%s' %id)
+
+    context = {
+        "form": form,
+    }
+    return render(request, 'logi.html', context)
