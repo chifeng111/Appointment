@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from .models import ConfeRoom, Order
+from django.contrib import messages
 from .forms import Logi_form, Register_form, Add_form
 
 # Create your views here.
@@ -14,7 +15,7 @@ def list(request):
 
 def appointment(request, id):
     room = get_object_or_404(ConfeRoom, id=id)
-    order = Order.objects.filter(room=room)
+    order = Order.objects.filter(room=room).order_by('-time')
     content = {
         'order': order,
         'room': room
@@ -66,8 +67,16 @@ def add(request, id):
         instance = form.save(commit=False)
         instance.user = request.user
         instance.room = ConfeRoom.objects.get(id=id)
-        instance.save()
-        return redirect('/conferance/%s' %id)
+        order_list = Order.objects.filter(room=instance.room)
+        time_list = []
+        for order in order_list:
+            time_list.append(order.time)
+        if instance.time not in time_list:
+            instance.save()
+            return redirect('/conferance/%s' %id)
+        else:
+            messages.error(request,'该时间已被预约')
+            return redirect('/conferance/%s' % id)
 
     context = {
         "form": form,
