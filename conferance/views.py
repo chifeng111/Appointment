@@ -1,3 +1,4 @@
+import datetime
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
@@ -5,7 +6,7 @@ from .models import ConfeRoom, Order
 from django.contrib import messages
 from .forms import Logi_form, Register_form, Add_form
 
-# Create your views here.
+#显示可用会议室
 def list(request):
     room = ConfeRoom.objects.all()
     content = {
@@ -13,6 +14,7 @@ def list(request):
     }
     return render(request, 'list.html', content)
 
+#某个会议室预约详情
 def appointment(request, id):
     room = get_object_or_404(ConfeRoom, id=id)
     order = Order.objects.filter(room=room).order_by('-time')
@@ -72,8 +74,12 @@ def add(request, id):
         for order in order_list:
             time_list.append(order.time)
         if instance.time not in time_list:
-            instance.save()
-            return redirect('/conferance/%s' %id)
+            if date_is_valid(instance.time):
+                instance.save()
+                return redirect('/conferance/%s' %id)
+            else:
+                messages.error(request, '超出预约范围')
+                return redirect('/conferance/%s' % id)
         else:
             messages.error(request,'该时间已被预约')
             return redirect('/conferance/%s' % id)
@@ -82,3 +88,12 @@ def add(request, id):
         "form": form,
     }
     return render(request, 'logi.html', context)
+
+#设置预约范围，判断是否合法
+def date_is_valid(date):
+    d1 = datetime.date.today()
+    d2 = d1 + datetime.timedelta(days=14)
+    if date >= d1 and date < d2:
+        return True
+    else:
+        return False
