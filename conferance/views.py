@@ -1,6 +1,6 @@
 import datetime
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.contrib.auth import authenticate, login, logout
 from .models import ConfeRoom, Order
 from django.contrib import messages
@@ -90,10 +90,18 @@ def add(request, id):
     }
     return render(request, 'logi.html', context)
 
+def delete(request, room_id, order_id):
+    order = get_object_or_404(Order,id=order_id)
+    if order.user != request.user:
+        raise Http404
+    order.delete()
+    messages.success(request,'删除成功！')
+    return redirect('/conferance/%s' % room_id)
+
 #设置预约范围，判断是否合法
 def date_is_valid(date):
     d1 = datetime.date.today()
-    d2 = d1 + datetime.timedelta(days=14)
+    d2 = d1 + datetime.timedelta(days=15)
     if date >= d1 and date < d2:
         return True
     else:

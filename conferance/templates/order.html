@@ -4,7 +4,7 @@
 
 {% block body %}
     {% for i in order %}
-        <h4>{{ i.time }}-{{ i.user }}-{{ i.room }}</h4>
+        <h4>{{ i.time }}-{{ i.user }}-{{ i.room }}-{{ i.id }}-<a href="{% url 'conferance:delete' room.id i.id %}">delete</a> </h4>
     {% endfor %}
     <br>
     <a href="{% url 'conferance:add' room.id %}" class="btn btn-default" role="button">预约</a>

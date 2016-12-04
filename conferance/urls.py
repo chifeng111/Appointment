@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^logo/$', views.logo, name='logo'),
     url(r'^register/$', views.register, name='register'),
     url(r'^(?P<id>[0-9]+)/add/$', views.add, name='add'),
+    url(r'^(?P<room_id>[0-9]+)/(?P<order_id>[0-9]+)/delete/$', views.delete, name='delete'),
 ]
