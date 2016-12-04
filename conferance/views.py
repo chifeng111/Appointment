@@ -17,7 +17,8 @@ def list(request):
 #某个会议室预约详情
 def appointment(request, id):
     room = get_object_or_404(ConfeRoom, id=id)
-    order = Order.objects.filter(room=room).order_by('-time')
+    d = datetime.date.today()
+    order = Order.objects.filter(room=room, time__gte=d).order_by('time')
     content = {
         'order': order,
         'room': room
