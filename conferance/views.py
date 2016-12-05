@@ -65,6 +65,9 @@ def register(request):
     return render(request, 'logi.html', content)
 
 def add(request, id):
+    if not request.user.is_active:
+        return redirect('conferance:register')
+
     form = Add_form(request.POST)
     if form.is_valid():
         instance = form.save(commit=False)

@@ -3,9 +3,27 @@
 {% block title %}预约详情 | {{ room.num }}{% endblock %}
 
 {% block body %}
+    <table class="table table-bordered">
+    <tr>
+        <td>日期</td>
+        <td>预约人</td>
+        <td>会议室</td>
+        <td>操作</td>
+    </tr>
     {% for i in order %}
-        <h4>{{ i.time }}-{{ i.user }}-{{ i.room }}-{{ i.id }}-<a href="{% url 'conferance:delete' room.id i.id %}">delete</a> </h4>
-    {% endfor %}
+    <tr>
+        <td>{{ i.time }}</td>
+        <td>{{ i.user }}</td>
+        <td>{{ i.room }}</td>
+        <td>
+            {% if i.user == request.user %}
+                <a href="{% url 'conferance:delete' room.id i.id %}">取消</a>
+            {% endif %}
+        </td>
+     </tr>
+     {% endfor %}
+    </table>
+
     <br>
     <a href="{% url 'conferance:add' room.id %}" class="btn btn-default" role="button">预约</a>
 {% endblock %}
