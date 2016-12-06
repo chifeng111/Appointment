@@ -24,6 +24,7 @@ class Register_form(forms.ModelForm):
 
 
 class Add_form(forms.ModelForm):
+    time = forms.DateField()
     class Meta:
         model = Order
         fields = [
